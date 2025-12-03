@@ -26,5 +26,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             role=role,
             is_staff=is_staff  # Automatically set is_staff for admins
         )
+
+        if role=="admin":
+            user.is_staff = True
+            user.is_superuser= True
+            user.save()
         
         return user

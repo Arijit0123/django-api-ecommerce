@@ -7,5 +7,5 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['instructor']
         extra_kwargs = {
-            'students': {'required': False}  # 👈 This makes it optional
+            'students': {'required': False, 'allow_empty': True}  # 👈 This makes it optional
         }

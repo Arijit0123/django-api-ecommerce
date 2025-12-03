@@ -22,7 +22,7 @@ class Submission(models.Model):
     file = models.FileField(upload_to='submissions/')
     submitted_at = models.DateTimeField(auto_now=True)
     grade = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    feedback = models.TextField()
+    feedback = models.TextField(blank=True,null=True)
 
     def __str__(self):
        return f"Submission by {self.student.username} for {self.assignment.title}"

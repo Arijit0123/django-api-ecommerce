@@ -5,9 +5,12 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = '__all__'
+        extra_kwargs = {
+            'created_by': {'read_only': True}
+        }
 
 class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
-        field = '__all__'
+        fields = '__all__'
         read_only_fields = ['student', 'submitted_at']
