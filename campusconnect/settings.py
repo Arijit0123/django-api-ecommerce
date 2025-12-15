@@ -43,10 +43,13 @@ INSTALLED_APPS = [
     'assignments',
     'events',
     'dashboard',
+    'enrollments',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,6 +59,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'campusconnect.urls'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@campusconnect.com'
+
 
 TEMPLATES = [
     {
@@ -139,3 +146,17 @@ REST_FRAMEWORK = {
 
 
 AUTH_USER_MODEL = 'core.User'
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173',
+]

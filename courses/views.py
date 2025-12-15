@@ -10,18 +10,22 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class CourseCreateView(generics.CreateAPIView):
+class CourseListCreateView(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [permissions.IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAdminUser()]
+        return [permissions.IsAuthenticated()]
 
     def perform_create(self, serializer):
         serializer.save(instructor=self.request.user)
 
-class CourseListView(generics.ListAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class CourseListView(generics.ListAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
 class CourseDetailView(generics.RetrieveAPIView):
     queryset = Course.objects.all()

@@ -1,25 +1,26 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import generics, permissions
+from rest_framework.response import Response
 from events.models import Event, Comment
 from events.serializers import EventSerializer, CommentSerializer
+from typing import cast
 
 User = get_user_model()
 
-class EventCreateView(generics.CreateAPIView):
+class EventListCreateView(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        if self.request.user.role not in ['admin', 'teacher']:  # type: ignore
-            raise PermissionDenied("Only teachers and admin can create events.")
-        serializer.save(created_by=self.request.user)
+        user = cast(AbstractUser, self.request.user)
 
-class EventListView(generics.ListAPIView):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
-    permission_classes = [permissions.IsAuthenticated]
+        if getattr(user, "role", None) not in ["admin", "teacher"]:
+            raise PermissionDenied("Only teachers and admins can create events.")
+
+        serializer.save(created_by=user)
 
 class EventDetailView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
